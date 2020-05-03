@@ -87,7 +87,7 @@ class RGBStatusPlugin(
             stdout, stderr = proc.communicate('{}\n'.format(password).encode())
         else:
             stdout, stderr = proc.communicate()
-        if stderr and 'incorrect password attempt' in stderr:
+        if stderr and 'incorrect password attempt'.encode() in stderr:
             self.api_errors.append('Incorrect password attempt')
             self._logger.error(stderr)
         else:
@@ -143,7 +143,7 @@ class RGBStatusPlugin(
                 self.run_idle_effect()
             return flask.jsonify({'lightsOn': self._lightsOn})
         if command == 'adduser':
-            cmd = 'sudo -S adduser pi gpio' 
+            cmd = 'sudo -S adduser pi gpio'
         elif command == 'enable_spi' and not self.spi_enabled():
             cmd = ['sudo', '-S', 'bash', '-c', 'echo dtparam=spi=on >> /boot/config.txt']
         elif command == 'increase_buffer' and not self.buffer_increased():
@@ -161,7 +161,7 @@ class RGBStatusPlugin(
     def get_settings_defaults(self):
         return {
             'led_count': 10,
-            'led_pin': 10, 
+            'led_pin': 10,
             'led_freq_hz': 800000,
             'led_dma': 10,
             'led_brightness': 255,
@@ -333,8 +333,8 @@ class RGBStatusPlugin(
             self.run_disconnected_effect()
 
     def on_print_progress(self, storage, path, progress):
-	if progress == 100 and hasattr(self, '_effect') and self._effect.is_alive():
-	    self._logger.info('Progress was set to 100, but the idle effect was already running. Ignoring progress update')
+     if progress == 100 and hasattr(self, '_effect') and self._effect.is_alive():
+        self._logger.info('Progress was set to 100, but the idle effect was already running. Ignoring progress update')
         if self.strip is not None and self._settings.get_boolean(['show_progress']):
             self.kill_effect()
             self._logger.info('Updating Progress LEDs: ' + str(progress))
